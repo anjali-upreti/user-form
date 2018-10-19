@@ -15,7 +15,7 @@ postDataHandler = () => {
         content: this.state.content,
 
     }
-    axios.post('https://jsonplaceholder.typicode.com/posts',post).then(response => {
+    axios.post('/posts',post).then(response => {
         console.log(response)
     });
 }
