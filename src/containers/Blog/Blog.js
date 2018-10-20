@@ -1,52 +1,30 @@
 import React, { Component } from 'react';
 
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
 import axios from 'axios';
+import Posts from '../Blog/Posts/Posts';
+import { Route, NavLink, Switch } from 'react-router-dom';
+import NewPost from './NewPost/NewPost';
+import FullPost from './FullPost/FullPost'; 
 
-class Blog extends Component {
-
-    state = {
-        posts: [],
-        selectedPostId: null
-    }
-    componentDidMount() {
-        axios.get('/posts').then(response => 
-        {
-            const posts=response.data.slice(0,4);
-            const updatedPosts = posts.map(post => {
-                return {
-                    ...post,
-                    author:'Max'
-                }
-            });
-            this.setState({posts: updatedPosts})
-        }
-        ).catch(error => {console.log(error);})
-    }
-    postSelectedHandler= (id)=> {
-        this.setState({selectedPostId: id})
-    }
+class Blog extends Component { 
     render () {
-        const posts = this.state.posts.map(post => {
-           
-            return <Post title= {post.title} key={post.id} 
-                    author={post.author}
-                    clicked={()=>this.postSelectedHandler(post.id)}/>
-        })
         return (
-            <div>
-                <section className="Posts">
-                    {posts}
-                </section>
-                <section>
-                    <FullPost id={this.state.selectedPostId} />
-                </section>
-                <section>
-                    <NewPost />
-                </section>
+            <div className="Blog">
+                <header>
+                    <nav>
+                        <ul>
+                            <li><NavLink to='/' exact>Home</NavLink></li>
+                            <li><NavLink to='/new-post' exact>New Post</NavLink></li>
+                        </ul>
+                    </nav>
+                </header>
+                {/* <Route path="/" exact render={()=> "Home"} /> */}
+                <Switch>
+                <Route path="/" exact component={Posts} />
+                <Route path="/new-post" exact component={NewPost} />
+                <Route path="/:id" exact component={FullPost} />
+                </Switch>
             </div>
         );
     }
